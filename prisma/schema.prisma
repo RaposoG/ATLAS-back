@@ -8,13 +8,17 @@ datasource db {
 }
 
 model User {
-  id           String  @id @default(uuid())
-  name         String?
-  email        String  @unique
-  passwordHash String? @map("password_hash")
+  id        String @id @default(uuid()) // ID único do usuário
+  discordId String @unique @map("discord_id") // ID do Discord, usado para identificar o usuário na API do Discord
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  username    String // Nome de usuário no Discord (ex.: "Tanottauro#0001")
+  global_name String? // Nome global do usuário (opcional, ex.: "Tanottauro")
+  avatar      String? // URL do avatar do Discord (opcional)
+  email       String? @unique // Email do usuário (opcional, dependendo dos escopos do OAuth)
 
-  @@map("users")
+  accessToken  String // Token de acesso retornado pelo Discord OAuth2
+  refreshToken String // Token de atualização para renovar o accessToken
+
+  createdAt DateTime @default(now()) // Data de criação do registro
+  updatedAt DateTime @updatedAt // Data da última atualização
 }

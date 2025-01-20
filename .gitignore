@@ -9,3 +9,6 @@ pnpm-lock.yaml
 # build
 build
 
+#prisma
+prisma/migrations
+
