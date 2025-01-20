@@ -1,0 +1,11 @@
+node_modules
+
+# variáveis ambiente
+.env
+
+#locks
+pnpm-lock.yaml
+
+# build
+build
+
