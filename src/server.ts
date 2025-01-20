@@ -6,9 +6,9 @@ import fastifyJwt from "@fastify/jwt";
 import fastifyCors from "@fastify/cors";
 import { env } from "@/env";
 import { errorHandler } from "./error-handler";
-import { createAccount } from "./routes/auth/create-account";
 import { join } from "node:path";
 import { readFileSync } from "node:fs";
+import { discordAuthRoutes } from "./routes/auth/discord-auth-routes";
 
 const _logo = join(__dirname, "assets", "logoExemplo.png");
 const _favIcon = join(__dirname, "assets", "logoExemplo.png");
@@ -75,10 +75,10 @@ app.register(fastifyCors);
 // Recomendo registrar as rotas daqui para baixo.
 
 //Auth
-app.register(createAccount);
+app.register(discordAuthRoutes);
 
 app
-  .listen({ port: env.PORT })
+  .listen({ port: env.PORT, host: "0.0.0.0" })
   .then(() => {
     console.log(`Server is running on port ${env.PORT}`);
   })
