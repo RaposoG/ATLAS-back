@@ -11,12 +11,6 @@ import { readFileSync } from "node:fs";
 import { discordAuthRoutes } from "./routes/auth/discord-auth-routes";
 import os from "os";
 
-const _logo = join(__dirname, "assets", "logoExemplo.png");
-const _favIcon = join(__dirname, "assets", "logoExemplo.png");
-
-const logo = readFileSync(_logo);
-const favIcon = readFileSync(_favIcon);
-
 const app = fastify({
   logger: env.NODE_ENV === "dev",
 }).withTypeProvider<ZodTypeProvider>();
@@ -48,23 +42,6 @@ app.register(fastifySwagger, {
 
 app.register(fastifySwaggerUI, {
   routePrefix: "/docs",
-  logo: {
-    type: "image/png",
-    content: logo,
-    href: "/docs",
-    target: "_blank",
-  },
-  theme: {
-    favicon: [
-      {
-        filename: "favicon.png",
-        rel: "icon",
-        sizes: "16x16",
-        type: "image/png",
-        content: favIcon,
-      },
-    ],
-  },
 });
 
 app.register(fastifyJwt, {
