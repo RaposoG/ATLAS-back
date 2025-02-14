@@ -29,7 +29,7 @@ export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
 
   console.error(error);
 
-  // send error to some observability tool
+  // TODO: enviar erro para ferramente de observação
 
   return reply.status(500).send({
     statusCode: 500,
