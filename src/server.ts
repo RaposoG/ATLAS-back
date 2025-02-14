@@ -11,6 +11,7 @@ import { readFileSync } from "node:fs";
 import os from "os";
 import { client } from "./bot";
 import { registerRoutes } from "./routes/routes";
+import { discordAuthRoutes } from "./routes/auth/discord-auth";
 
 const app = fastify({
   logger: env.NODE_ENV === "dev",
@@ -53,6 +54,9 @@ app.register(fastifyCors, {
   origin: "*",
 });
 
+//auth
+app.register(discordAuthRoutes);
+
 function getNetworkAddresses() {
   const interfaces = os.networkInterfaces();
   const addresses: { name: string; address: string }[] = [];
@@ -70,8 +74,6 @@ function getNetworkAddresses() {
 
 (async () => {
   try {
-    await registerRoutes(app);
-
     await app.listen({ port: env.PORT, host: "0.0.0.0" });
     console.log(`🚀 Server is running on port ${env.PORT}`);
 
