@@ -126,7 +126,7 @@ export async function discordAuthRoutes(app: FastifyInstance) {
           await sendDiscordLog(discordLogChannelId, "Login Bem-Sucedido", loginMessage, 0x00ff00);
         }
 
-        const sessionToken = app.jwt.sign({ userId: user.id }, { expiresIn: "7d" });
+        const sessionToken = app.jwt.sign({ sub: user.id }, { expiresIn: "7d" });
 
         return reply.status(200).send({
           message: "Authentication successful",
