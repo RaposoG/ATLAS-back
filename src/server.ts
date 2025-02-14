@@ -10,8 +10,8 @@ import { join } from "node:path";
 import { readFileSync } from "node:fs";
 import os from "os";
 import { client } from "./bot";
-import { registerRoutes } from "./routes/routes";
 import { discordAuthRoutes } from "./routes/auth/discord-auth";
+import { getUser } from "./routes/auth/get-user";
 
 const app = fastify({
   logger: env.NODE_ENV === "dev",
@@ -56,6 +56,7 @@ app.register(fastifyCors, {
 
 //auth
 app.register(discordAuthRoutes);
+app.register(getUser);
 
 function getNetworkAddresses() {
   const interfaces = os.networkInterfaces();
