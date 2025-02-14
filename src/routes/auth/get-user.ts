@@ -1,27 +1,8 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
-import axios from "axios";
 import { prisma } from "@/lib/prisma";
-import { BadRequestError } from "../_errors/bad-request-error";
-import { env } from "@/env";
-import { EmbedBuilder, TextChannel } from "discord.js";
-import { client } from "@/bot";
 import { auth } from "@/middlewares/auth";
-
-async function sendDiscordLog(channelId: string, title: string, description: string, color: number = 0x0099ff) {
-  try {
-    const channel = await client.channels.fetch(channelId);
-    if (channel && channel instanceof TextChannel) {
-      const embed = new EmbedBuilder().setColor(color).setTitle(title).setDescription(description).setTimestamp();
-      await channel.send({ embeds: [embed] });
-    } else {
-      console.error("Canal não encontrado ou não é um canal de texto.");
-    }
-  } catch (error) {
-    console.error("Erro ao enviar mensagem para o Discord:", error);
-  }
-}
 
 export async function getUser(app: FastifyInstance) {
   app
