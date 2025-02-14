@@ -49,7 +49,9 @@ app.register(fastifyJwt, {
   secret: env.SECRET_JWT,
 });
 
-app.register(fastifyCors);
+app.register(fastifyCors, {
+  origin: "*",
+});
 
 function getNetworkAddresses() {
   const interfaces = os.networkInterfaces();
