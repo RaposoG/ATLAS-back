@@ -8,8 +8,9 @@ import { env } from "@/env";
 import { errorHandler } from "./error-handler";
 import { join } from "node:path";
 import { readFileSync } from "node:fs";
-import { discordAuthRoutes } from "./routes/auth/discord-auth-routes";
 import os from "os";
+import { client } from "./bot";
+import { registerRoutes } from "./routes/routes";
 
 const app = fastify({
   logger: env.NODE_ENV === "dev",
@@ -50,11 +51,6 @@ app.register(fastifyJwt, {
 
 app.register(fastifyCors);
 
-// Recomendo registrar as rotas daqui para baixo.
-
-//Auth
-app.register(discordAuthRoutes);
-
 function getNetworkAddresses() {
   const interfaces = os.networkInterfaces();
   const addresses: { name: string; address: string }[] = [];
@@ -70,19 +66,23 @@ function getNetworkAddresses() {
   return addresses;
 }
 
-app
-  .listen({ port: env.PORT, host: "0.0.0.0" })
-  .then(() => {
-    console.log(`Server is running on port ${env.PORT}`);
-    const networkAddresses = getNetworkAddresses();
+(async () => {
+  try {
+    await registerRoutes(app);
 
+    await app.listen({ port: env.PORT, host: "0.0.0.0" });
+    console.log(`🚀 Server is running on port ${env.PORT}`);
+
+    const networkAddresses = getNetworkAddresses();
     console.log("Server is available at the following addresses:");
     networkAddresses.forEach(({ name, address }) => {
       console.log(`- ${name}: http://${address}:${env.PORT}`);
     });
-
     console.log(`Local: http://localhost:${env.PORT}`);
-  })
-  .catch((error) => {
-    console.error("Error starting server:", error);
-  });
+
+    await client.login(process.env.DISCORD_TOKEN_BOX);
+    console.log(`🤖 Bot conectado como ${client.user?.tag}`);
+  } catch (error) {
+    console.error("❌ Error starting server:", error);
+  }
+})();
