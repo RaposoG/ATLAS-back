@@ -10,6 +10,7 @@ const envSchema = z.object({
   DISCORD_CLIENT_SECRET: z.string(),
   DISCORD_TOKEN_BOX: z.string(),
   DISCORD_GUILD_ID: z.string(),
+  DISCORD_REDIRECT_URI: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);
