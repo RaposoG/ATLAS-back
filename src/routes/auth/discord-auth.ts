@@ -46,7 +46,6 @@ export async function discordAuthRoutes(app: FastifyInstance) {
     },
     async (request, reply) => {
       const { code } = request.body;
-      console.log(code);
       const discordLogChannelId = "1339782869526122606";
 
       if (!code) {
@@ -81,6 +80,8 @@ export async function discordAuthRoutes(app: FastifyInstance) {
         });
 
         const { id: discordId, username } = userResponse.data;
+
+        // Verificar se o usuário está no servidor Discord
         try {
           await axios.get(`${DISCORD_API_BASE}/guilds/${DISCORD_GUILD_ID}/members/${discordId}`, {
             headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` },
