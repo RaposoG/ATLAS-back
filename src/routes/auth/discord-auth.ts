@@ -59,6 +59,7 @@ export async function discordAuthRoutes(app: FastifyInstance) {
         const DISCORD_API_BASE = "https://discord.com/api";
         const DISCORD_BOT_TOKEN = env.DISCORD_TOKEN_BOX;
         const DISCORD_GUILD_ID = env.DISCORD_GUILD_ID;
+        const DISCORD_REDIRECT_URI = env.DISCORD_REDIRECT_URI;
 
         const tokenResponse = await axios.post(
           `${DISCORD_API_BASE}/oauth2/token`,
@@ -67,6 +68,7 @@ export async function discordAuthRoutes(app: FastifyInstance) {
             client_secret: DISCORD_CLIENT_SECRET,
             grant_type: "authorization_code",
             code,
+            redirect_uri: DISCORD_REDIRECT_URI,
           }).toString(),
           {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -81,7 +83,6 @@ export async function discordAuthRoutes(app: FastifyInstance) {
 
         const { id: discordId, username } = userResponse.data;
 
-        // Verificar se o usuário está no servidor Discord
         try {
           await axios.get(`${DISCORD_API_BASE}/guilds/${DISCORD_GUILD_ID}/members/${discordId}`, {
             headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` },
